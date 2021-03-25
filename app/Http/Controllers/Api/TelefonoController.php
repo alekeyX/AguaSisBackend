@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TelefonoResource;
+use App\Models\Telefono;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TelefonoController extends Controller
 {
@@ -14,17 +17,13 @@ class TelefonoController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $telefonos = Telefono::latest()->paginate(10);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response(['telefonos' => TelefonoResource::collection($telefonos), 'message' => 'Obtenidos con exito'], 200);
+
+        // $clients = telefono::all();
+    
+        // return $this->sendRespons(telefonoResource::collection($clients), 'Clientes obtenidos satisfactoriamente.');
     }
 
     /**
@@ -35,7 +34,19 @@ class TelefonoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'numero' => 'required|max:255',
+            'client_id' => 'required| max:255'
+        ]);
+
+        if ($validator->fails()) {
+            return response(['error' => $validator->errors(), 'Validation Error', $validator->errors()]);
+        }
+
+        $telefono = Telefono::create($data);
+        return response(['telefono' => new TelefonoResource($telefono), 'message' => 'telefono creado con exito'], 201);
     }
 
     /**
@@ -46,18 +57,15 @@ class TelefonoController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        $telefono = Telefono::find($id);
+        // echo $telefono1;
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        if (is_null($telefono)) {
+            return response(['message' => 'telefono no encontrado']);
+        }
+
+        // return $this->response(['telefono' => new telefonoResource($telefono), 'message' => 'telefono obtenido satisfactoriamente.'], 201);
+        return response(['telefono' => new TelefonoResource($telefono), 'message' => 'telefono encontrado'], 200);
     }
 
     /**
@@ -67,9 +75,25 @@ class TelefonoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, telefono $telefono)
     {
-        //
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'numero' => 'required',
+            'client_id' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response(['message' => 'Error de validacion.', $validator->errors()]);       
+        }
+
+        $telefono = Telefono::find($request->id);
+        $telefono->numero = $input['numero'];
+        $telefono->client_id = $input['client_id'];
+        $telefono->save();
+
+        return response(['telefono' => new TelefonoResource($telefono), 'message' => 'telefono actualizado con exito'], 200);
     }
 
     /**
@@ -78,8 +102,11 @@ class TelefonoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
-        //
+        $telefono = Telefono::find($id);
+        $telefono->delete();
+
+        return response(['message' => 'telefono eliminado con exito']);
     }
 }
