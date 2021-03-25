@@ -12,4 +12,5 @@ class Cancelado extends Model
     protected $fillable = [
         'fecha', 'factura_id'
     ];
+
 }

@@ -19,7 +19,8 @@ class CreateClientsTable extends Migration
             $table->string('name')->unique();
             $table->string('detail');
             $table->string('phone');
-            $table->integer('lote_id');
+            $table->unsignedBigInteger('lote_id');
+            $table->foreign('lote_id')->references('id')->on('lotes');
             $table->timestamps();
         });
     }

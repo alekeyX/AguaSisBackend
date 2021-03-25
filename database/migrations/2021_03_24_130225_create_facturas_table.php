@@ -21,7 +21,8 @@ class CreateFacturasTable extends Migration
             $table->decimal('total', 22)->nullable();
             $table->date('fecha')->nullable();
             $table->boolean('cancelado')->default(false);
-            $table->integer('client_id');
+            $table->unsignedBigInteger('client_id');
+            $table->foreign('client_id')->references('id')->on('clients');
             $table->timestamps();
         });
     }

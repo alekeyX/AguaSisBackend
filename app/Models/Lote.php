@@ -15,6 +15,6 @@ class Lote extends Model
 
     public function clients()
     {
-        return $this->hasMany(Client::class, 'lote_id', 'id');
+        return $this->hasMany(Client::class, 'lote_id');
     }
 }

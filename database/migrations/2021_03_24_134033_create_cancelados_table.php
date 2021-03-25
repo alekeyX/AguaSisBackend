@@ -16,7 +16,8 @@ class CreateCanceladosTable extends Migration
         Schema::create('cancelados', function (Blueprint $table) {
             $table->id();
             $table->date('fecha')->nullable();
-            $table->integer('factura_id');
+            $table->unsignedBigInteger('factura_id');
+            $table->foreign('factura_id')->references('id')->on('facturas');
             $table->timestamps();
         });
     }
