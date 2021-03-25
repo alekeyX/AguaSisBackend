@@ -47,4 +47,7 @@ Route::middleware('auth:api')->group( function () {
     // Route::apiResource('/lotes', LoteController::class);
     Route::get('/lotes', [LoteController::class, 'index']);
     Route::post('/lotes', [LoteController::class, 'store']);
+    Route::get('/lotes/{id}', [LoteController::class, 'show']);
+    Route::put('/lotes/{id}', [LoteController::class, 'update']);
+    Route::delete('/lotes/{id}', [LoteController::class, 'delete']);
 });

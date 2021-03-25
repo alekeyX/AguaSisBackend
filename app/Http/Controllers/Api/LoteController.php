@@ -68,12 +68,14 @@ class LoteController extends Controller
     public function show($id)
     {
         $lote = Lote::find($id);
+        // echo $lote1;
 
         if (is_null($lote)) {
-            return $this->sendError('Lote no encontrado.');
+            return response(['message' => 'lote no encontrado']);
         }
 
-        return $this->sendRespons(new LoteResource($lote), 'Lote obtenido satisfactoriamente.');
+        // return $this->response(['lote' => new LoteResource($lote), 'message' => 'Lote obtenido satisfactoriamente.'], 201);
+        return response(['lote' => new LoteResource($lote), 'message' => 'Retrieved successfully'], 200);
     }
 
     /**
@@ -96,9 +98,23 @@ class LoteController extends Controller
      */
     public function update(Request $request, Lote $lote)
     {
-        $lote->update($request->all());
+        $input = $request->all();
 
-        return response(['lote' => new LoteResource($lote), 'message' => 'Actualizado con exito'], 200);
+        $validator = Validator::make($input, [
+            'name' => 'required',
+            'description' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response(['message' => 'Error de validacion.', $validator->errors()]);       
+        }
+
+        $lote = Lote::find($request->id);
+        $lote->name = $input['name'];
+        $lote->description = $input['description'];
+        $lote->save();
+
+        return response(['lote' => new LoteResource($lote), 'message' => 'Lote actualizado con exito'], 200);
     }
 
     /**
@@ -107,10 +123,11 @@ class LoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Lote $lote)
+    public function delete($id)
     {
+        $lote = Lote::find($id);
         $lote->delete();
 
-        return response(['message' => 'Eliminado con exito']);
+        return response(['message' => 'Lote eliminado con exito']);
     }
 }

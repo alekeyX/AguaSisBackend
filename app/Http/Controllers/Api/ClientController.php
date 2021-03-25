@@ -38,7 +38,7 @@ class ClientController extends ApiController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+            return $this->sendError('Error de validacion.', $validator->errors());       
         }
 
         $client = Client::create($input);
