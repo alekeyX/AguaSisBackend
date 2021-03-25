@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\ClientController;
+use App\Http\Controllers\Api\LoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,4 +42,9 @@ Route::middleware('auth:api')->group( function () {
     Route::get('/clients/{id}', [ClientController::class, 'show']);
     Route::put('/clients/{id}', [ClientController::class, 'update']);
     Route::delete('/clients/{id}', [ClientController::class, 'delete']);
+
+    // Rutas lote
+    // Route::apiResource('/lotes', LoteController::class);
+    Route::get('/lotes', [LoteController::class, 'index']);
+    Route::post('/lotes', [LoteController::class, 'store']);
 });

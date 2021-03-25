@@ -57,7 +57,7 @@ class ClientController extends ApiController
         $client = Client::find($id);
 
         if (is_null($client)) {
-            return $this->sendError('Client not found.');
+            return $this->sendError('Cliente no encontrado.');
         }
 
         return $this->sendRespons(new ClientResources($client), 'Cliente obtenido satisfactoriamente.');
@@ -77,6 +77,8 @@ class ClientController extends ApiController
         $validator = Validator::make($input, [
             'cod' => 'required',
             'name' => 'required',
+            'phone' => 'required',
+            'lote_id' => 'required',
             'detail' => 'required'
         ]);
 
@@ -88,6 +90,8 @@ class ClientController extends ApiController
         $client->cod = $input['cod'];
         $client->name = $input['name'];
         $client->detail = $input['detail'];
+        $client->phone = $input['phone'];
+        $client->lote_id = $input['lote_id'];
         $client->save();
 
         return $this->sendRespons(new ClientResources($client), 'Cliente actualizado satisfactoriamente.');
