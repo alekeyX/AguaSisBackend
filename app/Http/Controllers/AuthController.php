@@ -54,7 +54,7 @@ class AuthController extends ApiController
         //     "user" => $user
         // ];
         // return $this->sendRespons($data,"Bienvenido");
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+        if(Auth::attempt(['name' => $request->username, 'password' => $request->password])){
             $user = Auth::user();
             $token = $user->createToken('laravel-passport')->accessToken;
             $success['token'] = $token;
